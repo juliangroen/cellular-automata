@@ -7,10 +7,14 @@ import pyxel
 class App:
     def __init__(self):
         pyxel.init(64, 64, title="Conway's Game of Life", fps=60)
+        # self.cell_state = [
+        #     [False for _ in range(pyxel.width)] for _ in range(pyxel.height)
+        # ]
         self.cell_state = [
-            [False for _ in range(pyxel.width)] for _ in range(pyxel.height)
+            [random.choice([True, False]) for _ in range(pyxel.width)]
+            for _ in range(pyxel.height)
         ]
-        self.running = False
+        self.running = True
         pyxel.mouse(True)
         pyxel.run(self.update, self.draw)
 
