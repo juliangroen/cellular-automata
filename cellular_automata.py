@@ -72,25 +72,18 @@ class App:
         self.cell_state = new_state
 
     def in_cell(self):
-        # get dimensions of board area
         board_origin = (8, 8)
         board_width = STATE_WIDTH * 8
         board_height = STATE_HEIGHT * 8
 
-        # check if current cursor x, y is in board area
         if pyxel.mouse_x > board_origin[0] and pyxel.mouse_x < board_width:
             if pyxel.mouse_y > board_origin[1] and pyxel.mouse_y < board_height:
                 cell_x = (pyxel.mouse_x - board_origin[0]) // 8
                 cell_y = (pyxel.mouse_y - board_origin[1]) // 8
 
-                # return the cell index
                 return (cell_x, cell_y)
 
-        # if the mouse is not in the board area, return False
         return False
-
-        # if true return cell index
-        # else return false
 
     def cells(self):
         for y_index, y_value in enumerate(self.cell_state):
