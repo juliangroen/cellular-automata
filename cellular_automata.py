@@ -134,23 +134,20 @@ class App:
         height = WINDOW_HEIGHT / 2
         start = (WINDOW_WIDTH / 4, WINDOW_HEIGHT / 4)
 
-        buttons_string = """\
-SPACE = PAUSE
-\n
-LEFT CLICK = CREATE CELL
-\n
-RIGHT CLICK = DELETE CELL
-\n
-RETURN = TOGGLE AUTOMATA
-\n
-R = GENERATE RANDOM CELLS
-"""
-
         pyxel.rect(start[0] + 4, start[1] + 4, width, height, 0)
         pyxel.rect(start[0], start[1], width, height, 5)
         pyxel.rect(start[0] + 4, start[1] + 4, width - 8, height - 8, 1)
-        pyxel.text(start[0] + 32, start[1] + 16, "CELLULAR AUTOMATA", 6)
-        pyxel.text(start[0] + 16, start[1] + 36, buttons_string, 6)
+
+        pyxel.text(
+            start[0] + 32,
+            start[1] + 16,
+            "CELLULAR AUTOMATA",
+            (pyxel.frame_count // 8) % 16,
+        )
+        pyxel.text(start[0] + 16, start[1] + 48, "SPACE = PAUSE", 6)
+        pyxel.text(start[0] + 16, start[1] + 64, "LEFT CLICK = TOGGLE CELL", 6)
+        pyxel.text(start[0] + 16, start[1] + 80, "RETURN = TOGGLE AUTOMATA", 6)
+        pyxel.text(start[0] + 16, start[1] + 96, "R = GENERATE RANDOM CELLS", 6)
 
     def update(self):
         if pyxel.btnp(pyxel.KEY_Q):
