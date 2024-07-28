@@ -6,8 +6,8 @@ import pyxel
 WINDOW_WIDTH = 256
 WINDOW_HEIGHT = 256
 CELL_SIZE = 8
-STATE_WIDTH = int((WINDOW_WIDTH - 16) / CELL_SIZE)
-STATE_HEIGHT = int((WINDOW_HEIGHT - 16) / CELL_SIZE)
+STATE_WIDTH = (WINDOW_WIDTH - 16) // CELL_SIZE
+STATE_HEIGHT = (WINDOW_HEIGHT - 16) // CELL_SIZE
 BPM = 120
 
 ######
@@ -71,6 +71,27 @@ class App:
 
         self.cell_state = new_state
 
+    def in_cell(self):
+        # get dimensions of board area
+        board_origin = (8, 8)
+        board_width = STATE_WIDTH * 8
+        board_height = STATE_HEIGHT * 8
+
+        # check if current cursor x, y is in board area
+        if pyxel.mouse_x > board_origin[0] and pyxel.mouse_x < board_width:
+            if pyxel.mouse_y > board_origin[1] and pyxel.mouse_y < board_height:
+                cell_x = (pyxel.mouse_x - board_origin[0]) // 8
+                cell_y = (pyxel.mouse_y - board_origin[1]) // 8
+
+                # return the cell index
+                return (cell_x, cell_y)
+
+        # if the mouse is not in the board area, return False
+        return False
+
+        # if true return cell index
+        # else return false
+
     def cells(self):
         for y_index, y_value in enumerate(self.cell_state):
             for x_index, x_value in enumerate(y_value):
@@ -82,17 +103,17 @@ class App:
     def window_frame(self):
         corner_cords = [
             (0, 0),  # NW
-            (int(WINDOW_WIDTH - CELL_SIZE * 2), 0),  # NE
-            (0, int(WINDOW_HEIGHT - CELL_SIZE * 2)),  # SW
+            (WINDOW_WIDTH - CELL_SIZE * 2, 0),  # NE
+            (0, WINDOW_HEIGHT - CELL_SIZE * 2),  # SW
             (
-                int(WINDOW_WIDTH - CELL_SIZE * 2),
-                int(WINDOW_HEIGHT - CELL_SIZE * 2),
+                WINDOW_WIDTH - CELL_SIZE * 2,
+                WINDOW_HEIGHT - CELL_SIZE * 2,
             ),  # SE
         ]
         corner_sprite_cords = [(0, 16), (16, 16), (0, 32), (16, 32)]
 
-        width_sprite_total = int(WINDOW_WIDTH / CELL_SIZE)
-        height_sprite_total = int(WINDOW_HEIGHT / CELL_SIZE)
+        width_sprite_total = WINDOW_WIDTH // CELL_SIZE
+        height_sprite_total = WINDOW_HEIGHT // CELL_SIZE
 
         for unit in range(width_sprite_total):
             x = unit * CELL_SIZE
@@ -169,9 +190,9 @@ class App:
                 [False for _ in range(STATE_WIDTH)] for _ in range(STATE_HEIGHT)
             ]
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
-            mx = int(pyxel.mouse_x / CELL_SIZE)
-            my = int(pyxel.mouse_y / CELL_SIZE)
-            self.cell_state[my][mx] = not self.cell_state[my][mx]
+            if self.in_cell():
+                cell_x, cell_y = self.in_cell()
+                self.cell_state[cell_y][cell_x] = not self.cell_state[cell_y][cell_x]
         if self.running:
             if pyxel.frame_count % 30 == 0:
                 self.automata()
