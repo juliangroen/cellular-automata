@@ -156,12 +156,14 @@ class App:
             "CELLULAR AUTOMATA",
             (pyxel.frame_count // 8) % 16,
         )
+
         pyxel.text(start[0] + 8, start[1] + 32, "SPACE/(START) = PAUSE/PLAY", 6)
-        pyxel.text(start[0] + 8, start[1] + 48, "MOUSE/D-PAD = MOVE CURSOR", 6)
-        pyxel.text(start[0] + 8, start[1] + 64, "MOUSE1/(A) = TOGGLE CELL", 6)
-        pyxel.text(start[0] + 8, start[1] + 80, "RETURN/(Y) = TOGGLE AUTOMATA", 6)
-        pyxel.text(start[0] + 8, start[1] + 96, "R/(X) = FILL RANDOM CELLS", 6)
-        pyxel.text(start[0] + 8, start[1] + 112, "C/(SELECT) = CLEAR CELLS", 6)
+        pyxel.text(start[0] + 8, start[1] + 40, "MOUSE/D-PAD = MOVE CURSOR", 6)
+        pyxel.text(start[0] + 8, start[1] + 48, "MOUSE1/(A) = TOGGLE CELL", 6)
+        pyxel.text(start[0] + 8, start[1] + 56, "RETURN/(Y) = TOGGLE AUTOMATA", 6)
+        pyxel.text(start[0] + 8, start[1] + 64, "R/(X) = FILL RANDOM CELLS", 6)
+        pyxel.text(start[0] + 8, start[1] + 72, "C/(SELECT) = CLEAR CELLS", 6)
+        pyxel.text(start[0] + 8, start[1] + 112, "PRESS Q/(B) NOW TO QUIT", 6)
 
     def cursor(self):
         pyxel.blt(
@@ -170,22 +172,24 @@ class App:
 
     def cursor_controller(self):
         if pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_UP):
-            if self.cursor_pos_y - 8 > 8:
+            if self.cursor_pos_y - 8 >= 8:
                 self.cursor_pos_y -= 8
         if pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_DOWN):
             if self.cursor_pos_y + 8 < STATE_HEIGHT * 8:
                 self.cursor_pos_y += 8
         if pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_LEFT):
-            if self.cursor_pos_x - 8 > 8:
-                self.cursor_pos_y -= 8
+            if self.cursor_pos_x - 8 >= 8:
+                self.cursor_pos_x -= 8
         if pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_RIGHT):
             if self.cursor_pos_x + 8 < STATE_WIDTH * 8:
-                self.cursor_pos_y += 8
+                self.cursor_pos_x += 8
 
     def update(self):
-        if pyxel.btnp(pyxel.KEY_Q):
-            pyxel.quit()
-        if pyxel.btnp(pyxel.KEY_RETURN) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_A):
+        self.cursor_controller()
+        if self.paused:
+            if pyxel.btnp(pyxel.KEY_Q) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_B):
+                pyxel.quit()
+        if pyxel.btnp(pyxel.KEY_RETURN) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_Y):
             if not self.paused:
                 self.running = not self.running
         if pyxel.btnp(pyxel.KEY_SPACE) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_START):
@@ -197,7 +201,7 @@ class App:
                 [random.choice([True, False]) for _ in range(STATE_WIDTH)]
                 for _ in range(STATE_HEIGHT)
             ]
-        if pyxel.btnp(pyxel.KEY_C) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_BACK):
+        if pyxel.btnp(pyxel.KEY_C) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_B):
             self.cell_state = [
                 [False for _ in range(STATE_WIDTH)] for _ in range(STATE_HEIGHT)
             ]
@@ -205,8 +209,11 @@ class App:
             if self.in_cell():
                 cell_x, cell_y = self.in_cell()
                 self.cell_state[cell_y][cell_x] = not self.cell_state[cell_y][cell_x]
+        if pyxel.btnp(pyxel.GAMEPAD1_BUTTON_A):
+            x = (self.cursor_pos_x // CELL_SIZE) - 1
+            y = (self.cursor_pos_y // CELL_SIZE) - 1
+            self.cell_state[y][x] = not self.cell_state[y][x]
         if self.running:
-            self.cursor_controller()
             if pyxel.frame_count % 30 == 0:
                 self.automata()
 
