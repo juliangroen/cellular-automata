@@ -171,16 +171,16 @@ class App:
         )
 
     def cursor_controller(self):
-        if pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_UP):
+        if pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_UP, hold=16, repeat=2):
             if self.cursor_pos_y - 8 >= 8:
                 self.cursor_pos_y -= 8
-        if pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_DOWN):
+        if pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_DOWN, hold=16, repeat=2):
             if self.cursor_pos_y + 8 < STATE_HEIGHT * 8:
                 self.cursor_pos_y += 8
-        if pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_LEFT):
+        if pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_LEFT, hold=16, repeat=2):
             if self.cursor_pos_x - 8 >= 8:
                 self.cursor_pos_x -= 8
-        if pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_RIGHT):
+        if pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_RIGHT, hold=16, repeat=2):
             if self.cursor_pos_x + 8 < STATE_WIDTH * 8:
                 self.cursor_pos_x += 8
 
