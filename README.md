@@ -6,10 +6,15 @@ To play please visit [https://juliangroen.github.io/cellular-automata](https://j
 ### Controls
 
 Space/(Start) = Pause/Play
+
 Mouse/D-Pad = Move Cursor
+
 Mouse1/(A) = Toggle Cell
+
 Return/(Y) = Toggle Automata
+
 R/(X) = Fill Random Cells
+
 C/(Select) = Clear Cells
 
 Press Q/(B) from the pause screen to quit.
