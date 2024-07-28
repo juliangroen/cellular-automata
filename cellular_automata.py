@@ -202,6 +202,7 @@ class App:
                 for _ in range(STATE_HEIGHT)
             ]
         if pyxel.btnp(pyxel.KEY_C) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_B):
+            self.running = False
             self.cell_state = [
                 [False for _ in range(STATE_WIDTH)] for _ in range(STATE_HEIGHT)
             ]
@@ -224,9 +225,11 @@ class App:
         pyxel.dither(1)
         self.cells()
         self.window_frame()
+        self.cursor()
+        if (pyxel.frame_count // 30) % 2 == 0 and self.running:
+            pyxel.blt(0, 0, 0, 16, 8, CELL_SIZE, CELL_SIZE, 0)
         if self.paused:
             self.menu()
-        self.cursor()
 
 
 App()
